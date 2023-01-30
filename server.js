@@ -1,6 +1,11 @@
 const express=require('express');
 const app=express();
 const mongoose= require('mongoose');
+const bodyParser= require('body-parser');
+const passport= require('passport');
+
+app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.json());
 
 
 const db= require('./config/keys').mongoURL;
@@ -16,9 +21,10 @@ mongoose
 
 port= process.env.port || 5000;
 
-app.get('/',(req,res)=>{
-    res.send('Hello');
-});
+
+app.use(passport.initialize());
+
+require('./config/passport')(passport);
 
 app.use('/api/users', users);
 app.use('/api/posts', posts);
